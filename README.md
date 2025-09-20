@@ -55,16 +55,45 @@
 
 ```mermaid
 flowchart LR
-  ユーザ -- 接続操作 --> WebUI
-  WebUI -- ペアリング要求 --> WebBluetooth
-  WebBluetooth -- GATT接続 --> デバイス群
+    subgraph User["ユーザ操作"]
+      U1[接続ボタン] --> U2[計測開始／停止]
+      U2 --> U3[一括DL]
+    end
 
-  デバイス群 -- 計測データ送信 --> ロジック
-  ロジック -- 数値更新 --> 表示部
-  ロジック -- グラフ描画 --> ChartJS
-  ロジック -- 蓄積 --> メモリ
-  メモリ -- 保存要求 --> Excel生成
-  Excel生成 -- ダウンロード --> ユーザ
+    subgraph BrowserApp["ブラウザ内Webアプリ（index.html + app.js）"]
+      A1[Web Bluetooth API] 
+      A2[通知イベントhandler]
+      A3[ログ配列MAX.receivedData，MLX.receivedData]
+      A4[UI更新（数値）]
+      A5[Chart.jsグラフ更新]
+      A6[SheetJSでExcel生成]
+    end
+
+    subgraph MAX["MAX30102（心拍）"]
+      M1[(GATT Service)] --> M2[(BPM特性 8byte)] 
+      M1 --> M3[(距離フラグ特性 1byte)]
+    end
+
+    subgraph MLX["MLX90632（温度）"]
+      L1[(GATT Service)] --> L2[(温度特性 12byte)]
+    end
+
+    U1 -- デバイス選択・接続 --> A1
+    A1 <-- GATT接続／通知開始 --> M1
+    A1 <-- GATT接続／通知開始 --> L1
+
+    M2 -- Notify(8B) --> A2
+    M3 -- Notify(1B) --> A2
+    L2 -- Notify(12B) --> A2
+
+    A2 --> A4
+    A2 --> A5
+    A2 --> A3
+
+    U2 -- 開始/停止 --> A1
+    U3 -- クリック --> A6 --> A3
+
+
 ```
 
 ---
