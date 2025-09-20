@@ -97,13 +97,59 @@ flowchart LR
 
 ---
 
-## 4. 利用ライブラリ
+## 4. シーケンス図
+
+```mermaid
+sequenceDiagram
+    participant User as ユーザ
+    participant App as Webアプリ（Browser）
+    participant MAX as MAX30102
+    participant MLX as MLX90632
+
+    User->>App: ①「MAX接続」クリック
+    App->>MAX: ② GATT接続（サービス／特性取得）
+    MAX-->>App: ③ 接続完了
+
+    User->>App: ④「MLX接続」クリック
+    App->>MLX: ⑤ GATT接続（サービス／特性取得）
+    MLX-->>App: ⑥ 接続完了
+
+    Note over App: 両方接続済み→「計測開始」ボタンが有効化
+
+    User->>App: ⑦「計測開始」クリック
+    App->>MAX: ⑧ BPM特性，距離フラグ特性の通知開始
+    App->>MLX: ⑨ 温度特性の通知開始
+
+    MAX-->>App: ⑩ Notify: BPM+elapsed_ms（8B）
+    App->>App: ⑪ BPM移動平均更新→UI更新→グラフ更新→ログ配列へpush
+
+    MAX-->>App: ⑫ Notify: 距離フラグ（1B）
+    App->>App: ⑬ 装着状態の表示切替（色・文言）
+
+    MLX-->>App: ⑭ Notify: Ambient,Object,elapsed_ms（12B）
+    App->>App: ⑮ UI更新→グラフ更新→ログ配列へpush
+    App->>App: ⑯ （1Hz程度）最新値のUI反映タイマー
+
+    User->>App: ⑰「計測停止」クリック
+    App->>MAX: ⑱ 通知停止（listener解除）
+    App->>MLX: ⑲ 通知停止（listener解除，タイマー停止）
+
+    User->>App: ⑳「一括DL」クリック
+    App->>App: ㉑ SheetJSでExcel生成（MAXシート，MLXシート）
+    App-->>User: ㉒ .xlsx ダウンロード
+
+
+```
+
+---
+
+## 5. 利用ライブラリ
 - **Chart.js**: リアルタイム折れ線グラフ描画
 - **SheetJS (xlsx.js)**: Excelファイル生成
 
 ---
 
-## 5. 注意点
+## 6. 注意点
 - デバイス名は Arduino 側で「MAX R」「MAX L」「MLX R」「MLX L」と設定すること
 - 4台すべて接続されないと計測は開始できない
 - データ保存はブラウザ上のみ（サーバ通信なし）
