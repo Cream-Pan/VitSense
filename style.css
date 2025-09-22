@@ -1,0 +1,115 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: clamp(14px, 1.6vw, 16px); /* 画面幅に応じて可変 */
+  margin: 1rem;
+  background-color: rgb(241, 241, 226);
+  color: #333;
+}
+
+h1 {
+  font-style: bold;
+  color: #46a15f;
+}
+
+.controls {
+  margin-bottom: 1.5em;
+  display: flex; 
+  gap: 8px; 
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 0.6em 1em;
+  margin-right: 0.8em;
+  margin-bottom: 0.8em;
+  border: none;
+  border-radius: 6px;
+  background-color: #46a15f;
+  color: #fff;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+button:hover { 
+  background-color: #005fa3; 
+}
+
+#max-chartContainer, #mlx-chartContainer{
+  border: 1px solid #ddd; 
+  border-radius: 10px; 
+  padding: 12px; 
+  margin: 1em 0; 
+  font-size: 0.8em;
+}
+
+.row { 
+  margin: 6px 0; 
+}
+
+.val { 
+  font-variant-numeric: tabular-nums; 
+}
+
+.grid { 
+  display: grid; 
+  grid-template-columns: 1fr; 
+  gap: 20px; 
+}
+
+@media (min-width: 900px) { 
+  .grid { grid-template-columns: 1fr 1fr; } 
+}
+
+.panel { 
+  border: 1px solid #ddd; 
+  border-radius: 10px; 
+  padding: 12px; 
+  background: #fff; 
+}
+
+.panel h2 { 
+  margin-top: 0; 
+}
+
+.section-title { 
+  color: #46a15f; 
+}
+
+.tiny-muted { 
+  font-size: .9em; 
+  opacity: .8; 
+}
+
+canvas { 
+  max-height: 360px; 
+}
+
+.toolbar { 
+  display:flex; 
+  gap:8px; 
+  flex-wrap:wrap; 
+  margin: 0 0 16px 0; 
+}
+
+.toolbar button { 
+  padding: 0.6em 1em; 
+  border: none; 
+  border-radius: 6px; 
+  background-color: #46a15f; 
+  color: #fff; 
+  font-size: 1em; 
+  cursor: pointer; 
+}
+
+.toolbar button:disabled { 
+  opacity: 0.5; 
+  cursor: not-allowed; 
+}
+
+.toolbar button:hover { 
+  background-color: #005fa3; 
+}

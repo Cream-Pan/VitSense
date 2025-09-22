@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VitSence</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  </head>
+  <body>
+    <h1>MAX/MLX センサ値ビューア</h1>
+    <!-- 統一コントロール -->
+    <div class="toolbar">
+      <button id="measure-all" disabled>計測開始</button>
+      <button id="download-all" disabled>一括ダウンロード(Excel)</button>
+    </div>
+
+    <div class="grid">
+      <!-- MAX パネル（R/L） -->
+      <section class="panel" id="max-panel">
+        <h2 class="section-title">MAX センサデータ（心拍）</h2>
+        <div class="subgrid">
+          <div class="box">
+            <h3>MAX R</h3>
+            <div class="controls">
+              <button id="maxR-connect">BLE接続</button>
+              <button id="maxR-disconnect" disabled>接続解除</button>
+            </div>
+            <div class="row">接続状態: <span id="maxR-status">未接続</span></div>
+            <div class="row">デバイス名: <span id="maxR-deviceName">-</span></div>
+            <div class="row">BPM: <span id="maxR-bpmValue">-</span></div>
+            <div class="row">平均BPM: <span id="maxR-avgBpmValue">-</span></div>
+            <div class="row">経過時間: <span id="maxR-timeValue">-</span> s</div>
+            <div class="row">受信時刻: <span id="maxR-recvTimeValue">-</span></div>
+            <div class="row">距離状態: <span id="maxR-distanceStatus">-</span></div>
+          </div>
+          <div class="box">
+            <h3>MAX L</h3>
+            <div class="controls">
+              <button id="maxL-connect">BLE接続</button>
+              <button id="maxL-disconnect" disabled>接続解除</button>
+            </div>
+            <div class="row">接続状態: <span id="maxL-status">未接続</span></div>
+            <div class="row">デバイス名: <span id="maxL-deviceName">-</span></div>
+            <div class="row">BPM: <span id="maxL-bpmValue">-</span></div>
+            <div class="row">平均BPM: <span id="maxL-avgBpmValue">-</span></div>
+            <div class="row">経過時間: <span id="maxL-timeValue">-</span> s</div>
+            <div class="row">受信時刻: <span id="maxL-recvTimeValue">-</span></div>
+            <div class="row">距離状態: <span id="maxL-distanceStatus">-</span></div>
+          </div>
+        </div>
+        <div id="max-chartContainer">
+          <canvas id="max-realtimeChart"></canvas>
+          <p class="tiny-muted">チャートは <strong>BPM（R/L）</strong> を表示します（平均BPMは上の数値欄で更新）．</p>
+        </div>
+      </section>
+
+      <!-- MLX パネル（R/L） -->
+      <section class="panel" id="mlx-panel">
+        <h2 class="section-title">MLX センサデータ（鼓膜温度）</h2>
+        <div class="subgrid">
+          <div class="box">
+            <h3>MLX R</h3>
+            <div class="controls">
+              <button id="mlxR-connect">BLE接続</button>
+              <button id="mlxR-disconnect" disabled>接続解除</button>
+            </div>
+            <div class="row">接続状態: <span id="mlxR-status">未接続</span></div>
+            <div class="row">デバイス名: <span id="mlxR-deviceName">-</span></div>
+            <div class="row">Ambient (°C): <span id="mlxR-ambValue" class="val">-</span></div>
+            <div class="row">Object (°C): <span id="mlxR-objValue" class="val">-</span></div>
+            <div class="row">経過時間: <span id="mlxR-timeValue" class="val">-</span> s</div>
+            <div class="row">受信時刻: <span id="mlxR-recvTimeValue" class="val">-</span></div>
+          </div>
+          <div class="box">
+            <h3>MLX L</h3>
+            <div class="controls">
+              <button id="mlxL-connect">BLE接続</button>
+              <button id="mlxL-disconnect" disabled>接続解除</button>
+            </div>
+            <div class="row">接続状態: <span id="mlxL-status">未接続</span></div>
+            <div class="row">デバイス名: <span id="mlxL-deviceName">-</span></div>
+            <div class="row">Ambient (°C): <span id="mlxL-ambValue" class="val">-</span></div>
+            <div class="row">Object (°C): <span id="mlxL-objValue" class="val">-</span></div>
+            <div class="row">経過時間: <span id="mlxL-timeValue" class="val">-</span> s</div>
+            <div class="row">受信時刻: <span id="mlxL-recvTimeValue" class="val">-</span></div>
+          </div>
+        </div>
+        <div id="mlx-chartContainer">
+          <canvas id="mlx-realtimeChart"></canvas>
+          <p class="tiny-muted">チャートは <strong>Object 温度（R/L）</strong> を表示します（Ambient は上の数値欄で更新）．</p>
+        </div>
+      </section>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
